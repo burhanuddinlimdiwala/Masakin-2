@@ -117,22 +117,43 @@
   });
 
   // Zoom with pinch (touch)
-  panoElement.addEventListener('touchmove', function(event) {
-    if (event.touches.length === 2) {  // Detect multi-touch (pinch)
-      event.preventDefault();
-      var dx = event.touches[0].pageX - event.touches[1].pageX;
-      var dy = event.touches[0].pageY - event.touches[1].pageY;
-      var distance = Math.sqrt(dx * dx + dy * dy);
+  var previousDistance = null;
 
-      // Calculate the new zoom level
-      var scaleFactor = distance / previousDistance;
-      var fov = viewer.view().fov();
-      var newFov = fov / scaleFactor;
-      viewer.view().setFov(newFov);
-
-      previousDistance = distance;  // Update the previous distance
+// Zoom with pinch (touch)
+panoElement.addEventListener('touchmove', function(event) {
+  if (event.touches.length === 2) {  // Detect multi-touch (pinch)
+    event.preventDefault();
+    
+    var dx = event.touches[0].pageX - event.touches[1].pageX;
+    var dy = event.touches[0].pageY - event.touches[1].pageY;
+    var distance = Math.sqrt(dx * dx + dy * dy);
+    
+    // Initialize previousDistance on the first touchmove event
+    if (previousDistance === null) {
+      previousDistance = distance;
+      return;
     }
-  });
+
+    // Calculate the scale factor based on the change in distance
+    var scaleFactor = distance / previousDistance;
+    var fov = viewer.view().fov();
+    
+    // Adjust the zoom speed to match the mouse scroll sensitivity
+    var zoomSpeed = 0.002; // Adjust this value to make pinch zoom match mouse scroll
+    var newFov = fov / scaleFactor;
+    viewer.view().setFov(newFov);
+    
+    // Update previousDistance for the next event
+    previousDistance = distance;
+  }
+});
+
+// Reset previousDistance when touch ends
+panoElement.addEventListener('touchend', function(event) {
+  if (event.touches.length < 2) {
+    previousDistance = null;
+  }
+});
    
   // Set up autorotate, if enabled.
   var autorotate = Marzipano.autorotate({
