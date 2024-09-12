@@ -121,7 +121,7 @@
 
   // Variables for touch pinch zoom
   var previousDistance = null;
-  var minFov = Math.PI / 4; // Minimum FOV limit to prevent excessive zoom-out
+  var minFov = Math.PI / 200; // Minimum FOV limit to prevent excessive zoom-out
   var zoomSensitivity = 1.2; // Zoom-in sensitivity
 
   // Zoom with pinch (touch)
