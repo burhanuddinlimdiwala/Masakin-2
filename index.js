@@ -82,7 +82,7 @@
       { cubeMapPreviewUrl: urlPrefix + "/" + data.id + "/preview.jpg" });
     var geometry = new Marzipano.CubeGeometry(data.levels);
 
-    var limiter = Marzipano.RectilinearView.limit.traditional(1000000, 1000*Math.PI/180, 120*Math.PI/180);
+    var limiter = Marzipano.RectilinearView.limit.traditional(2500, 1000*Math.PI/180, 120*Math.PI/180);
     var view = new Marzipano.RectilinearView(data.initialViewParameters, limiter);
 
     var scene = viewer.createScene({
@@ -119,39 +119,35 @@
     viewer.view().setFov(newFov);
   });
 
-  // Zoom with pinch (touch)
+  // Variables for touch pinch zoom
   var previousDistance = null;
+  var minFov = Math.PI / 4; // Minimum FOV limit to prevent excessive zoom-out
+  var zoomSensitivity = 1.2; // Zoom-in sensitivity
 
-// Zoom with pinch (touch)
-document.querySelector('#pano').addEventListener('touchmove', function(event) {
-  if (event.touches.length === 2) {  // Detect multi-touch (pinch)
-    event.preventDefault();
-    
-    var dx = event.touches[0].pageX - event.touches[1].pageX;
-    var dy = event.touches[0].pageY - event.touches[1].pageY;
-    var distance = Math.sqrt(dx * dx + dy * dy);
+  // Zoom with pinch (touch)
+  panoElement.addEventListener('touchmove', function(event) {
+    if (event.touches.length === 2) {  // Detect multi-touch (pinch)
+      event.preventDefault();
+      var dx = event.touches[0].pageX - event.touches[1].pageX;
+      var dy = event.touches[0].pageY - event.touches[1].pageY;
+      var distance = Math.sqrt(dx * dx + dy * dy);
 
-    if (previousDistance === null) {
-      previousDistance = distance;
-      return;
+      if (previousDistance) {
+        var scaleFactor = distance / previousDistance;
+        var fov = viewer.view().fov();
+        var newFov = fov / (scaleFactor * zoomSensitivity); // Zoom-in more with higher sensitivity
+        newFov = Math.max(minFov, newFov); // Apply minimum FOV limit
+
+        viewer.view().setFov(newFov);
+      }
+
+      previousDistance = distance;  // Update the previous distance
     }
+  });
 
-    var scaleFactor = distance / previousDistance;
-    var fov = viewer.view().fov();
-    var zoomSpeed = 0.005; // Adjust this value as needed
-    var newFov = fov / scaleFactor * (1 + zoomSpeed);
-    viewer.view().setFov(newFov);
-
-    previousDistance = distance;  // Update previous distance
-  }
-});
-
-// Reset previousDistance when touch ends
-document.querySelector('#pano').addEventListener('touchend', function(event) {
-  if (event.touches.length < 2) {
-    previousDistance = null;
-  }
-});
+  panoElement.addEventListener('touchend', function(event) {
+    previousDistance = null; // Reset previous distance when touch ends
+  });
    
   // Set up autorotate, if enabled.
   var autorotate = Marzipano.autorotate({
