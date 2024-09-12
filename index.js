@@ -108,6 +108,32 @@
     };
   });
 
+   // Zoom with mouse scroll
+   panoElement.addEventListener('wheel', function(event) {
+    event.preventDefault();
+    var fov = viewer.view().fov();
+    var newFov = fov + (event.deltaY * 0.001); // Adjust zoom speed by changing the multiplier
+    viewer.view().setFov(newFov);
+  });
+
+  // Zoom with pinch (touch)
+  panoElement.addEventListener('touchmove', function(event) {
+    if (event.touches.length === 2) {  // Detect multi-touch (pinch)
+      event.preventDefault();
+      var dx = event.touches[0].pageX - event.touches[1].pageX;
+      var dy = event.touches[0].pageY - event.touches[1].pageY;
+      var distance = Math.sqrt(dx * dx + dy * dy);
+
+      // Calculate the new zoom level
+      var scaleFactor = distance / previousDistance;
+      var fov = viewer.view().fov();
+      var newFov = fov / scaleFactor;
+      viewer.view().setFov(newFov);
+
+      previousDistance = distance;  // Update the previous distance
+    }
+  });
+   
   // Set up autorotate, if enabled.
   var autorotate = Marzipano.autorotate({
     yawSpeed: 0.03,
@@ -184,6 +210,7 @@
     return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
   }
 
+  
   function switchScene(scene) {
     stopAutorotate();
     scene.view.setParameters(scene.data.initialViewParameters);
