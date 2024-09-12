@@ -21,6 +21,9 @@
   var screenfull = window.screenfull;
   var data = window.APP_DATA;
 
+ 
+  
+  
   // Grab elements from DOM.
   var panoElement = document.querySelector('#pano');
   var sceneNameElement = document.querySelector('#titleBar .sceneName');
@@ -69,7 +72,7 @@
   };
 
   // Initialize viewer.
-  var viewer = new Marzipano.Viewer(panoElement, viewerOpts);
+  var viewer = new Marzipano.Viewer(document.querySelector('#pano'));
 
   // Create scenes.
   var scenes = data.scenes.map(function(data) {
@@ -120,36 +123,31 @@
   var previousDistance = null;
 
 // Zoom with pinch (touch)
-panoElement.addEventListener('touchmove', function(event) {
+document.querySelector('#pano').addEventListener('touchmove', function(event) {
   if (event.touches.length === 2) {  // Detect multi-touch (pinch)
     event.preventDefault();
     
     var dx = event.touches[0].pageX - event.touches[1].pageX;
     var dy = event.touches[0].pageY - event.touches[1].pageY;
     var distance = Math.sqrt(dx * dx + dy * dy);
-    
-    // Initialize previousDistance on the first touchmove event
+
     if (previousDistance === null) {
       previousDistance = distance;
       return;
     }
 
-    // Calculate the scale factor based on the change in distance
     var scaleFactor = distance / previousDistance;
     var fov = viewer.view().fov();
-    
-    // Adjust the zoom speed to match the mouse scroll sensitivity
-    var zoomSpeed = 0.002; // Adjust this value to make pinch zoom match mouse scroll
-    var newFov = fov / scaleFactor;
+    var zoomSpeed = 0.005; // Adjust this value as needed
+    var newFov = fov / scaleFactor * (1 + zoomSpeed);
     viewer.view().setFov(newFov);
-    
-    // Update previousDistance for the next event
-    previousDistance = distance;
+
+    previousDistance = distance;  // Update previous distance
   }
 });
 
 // Reset previousDistance when touch ends
-panoElement.addEventListener('touchend', function(event) {
+document.querySelector('#pano').addEventListener('touchend', function(event) {
   if (event.touches.length < 2) {
     previousDistance = null;
   }
