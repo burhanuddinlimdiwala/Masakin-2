@@ -82,7 +82,7 @@
       { cubeMapPreviewUrl: urlPrefix + "/" + data.id + "/preview.jpg" });
     var geometry = new Marzipano.CubeGeometry(data.levels);
 
-    var limiter = Marzipano.RectilinearView.limit.traditional(2500, 1000*Math.PI/180, 120*Math.PI/180);
+    var limiter = Marzipano.RectilinearView.limit.traditional(25000, 1000*Math.PI/180, 120*Math.PI/180);
     var view = new Marzipano.RectilinearView(data.initialViewParameters, limiter);
 
     var scene = viewer.createScene({
@@ -119,34 +119,49 @@
     viewer.view().setFov(newFov);
   });
 
-  // Variables for touch pinch zoom
-  var previousDistance = null;
-  var minFov = Math.PI / 200; // Minimum FOV limit to prevent excessive zoom-out
-  var zoomSensitivity = 1.2; // Zoom-in sensitivity
-
+  var initialPinchDistance = null;
+  var initialFov = null;
+  var minFov = Math.PI / 6;  // Minimum FOV (zoomed in)
+  var maxFov = Math.PI / 1.5; // Maximum FOV (zoomed out)
+  var zoomSensitivity = 0.05; // Higher sensitivity for zooming
+  
+  // Function to calculate distance between two touch points
+  function calculateTouchDistance(touch1, touch2) {
+    var dx = touch1.pageX - touch2.pageX;
+    var dy = touch1.pageY - touch2.pageY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+  
   // Zoom with pinch (touch)
   panoElement.addEventListener('touchmove', function(event) {
     if (event.touches.length === 2) {  // Detect multi-touch (pinch)
       event.preventDefault();
-      var dx = event.touches[0].pageX - event.touches[1].pageX;
-      var dy = event.touches[0].pageY - event.touches[1].pageY;
-      var distance = Math.sqrt(dx * dx + dy * dy);
-
-      if (previousDistance) {
-        var scaleFactor = distance / previousDistance;
-        var fov = viewer.view().fov();
-        var newFov = fov / (scaleFactor * zoomSensitivity); // Zoom-in more with higher sensitivity
-        newFov = Math.max(minFov, newFov); // Apply minimum FOV limit
-
+  
+      var distance = calculateTouchDistance(event.touches[0], event.touches[1]);
+  
+      if (!initialPinchDistance) {
+        // Set initial pinch distance and FOV
+        initialPinchDistance = distance;
+        initialFov = viewer.view().fov();
+      } else {
+        // Calculate zoom scale based on distance change
+        var scaleFactor = distance / initialPinchDistance;
+        var newFov = initialFov / scaleFactor;  // Reverse the scaling for zooming in more
+  
+        // Clamp FOV to prevent zooming too much in or out
+        newFov = Math.max(minFov, Math.min(maxFov, newFov));
+  
+        // Set the new FOV (zoom level)
         viewer.view().setFov(newFov);
       }
-
-      previousDistance = distance;  // Update the previous distance
     }
   });
-
+  
   panoElement.addEventListener('touchend', function(event) {
-    previousDistance = null; // Reset previous distance when touch ends
+    // Reset the initial pinch distance after touch ends
+    if (event.touches.length < 2) {
+      initialPinchDistance = null;
+    }
   });
    
   // Set up autorotate, if enabled.
