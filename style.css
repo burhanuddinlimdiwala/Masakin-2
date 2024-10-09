@@ -877,22 +877,26 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
 
 /* Positioning buttons relatively using percentages for responsiveness */
 #hotspot1 {
-  bottom: 30%; /* Position relative to the container */
-  right: 80%; /* Adjust relative to container size */
+  bottom: 15%; /* Position relative to the container */
+  right: 83%; /* Adjust relative to container size */
 }
 
 #hotspot2 {
-  bottom: 70%; /* Position relative to the container */
+  bottom: 65%; /* Position relative to the container */
   right: 53%;
 }
 
 #hotspot3 {
-  bottom: 50%; /* Position relative to the container */
+  bottom: 60%; /* Position relative to the container */
   right: 30%;
 }
 #hotspot4 {
   bottom: 50%; /* Position relative to the container */
   right: 60%;
+}
+#hotspot5 {
+  bottom: 52%; /* Position relative to the container */
+  right: 18%;
 }
 
 /* Main Button at the bottom-right corner */

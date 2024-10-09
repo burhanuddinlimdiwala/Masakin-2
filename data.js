@@ -20,16 +20,16 @@ var APP_DATA = {
       ],
       "faceSize": 1024,
       "initialViewParameters": {
-        "yaw": 0.15463875856164933,
-        "pitch": 0.16596605474043535,
-        "fov": 1.4585144351731572
+        "pitch": 0,
+        "yaw": 0,
+        "fov": 1.5707963267948966
       },
       "linkHotspots": [
         {
-          "yaw": 0.346979631734774,
-          "pitch": 0.3367178286652752,
+          "yaw": 0.3632377492508745,
+          "pitch": 0.3589224276442682,
           "rotation": 0,
-          "target": "3-passage"
+          "target": "4-passage"
         }
       ],
       "infoHotspots": []
@@ -64,23 +64,23 @@ var APP_DATA = {
       },
       "linkHotspots": [
         {
-          "yaw": 1.3064465373085987,
-          "pitch": 0.5262704277671677,
+          "yaw": 1.3449700369781663,
+          "pitch": 0.5305806230668537,
           "rotation": 0,
           "target": "0-living-room"
         },
         {
-          "yaw": -1.6285701778102784,
-          "pitch": 0.6281883820002356,
+          "yaw": -1.6311900968829143,
+          "pitch": 0.5361580098323415,
           "rotation": 0,
-          "target": "2-bedroom"
+          "target": "2-bed-room-v1"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "2-bedroom",
-      "name": "Bedroom",
+      "id": "2-bed-room-v1",
+      "name": "Bed Room (V1)",
       "levels": [
         {
           "tileSize": 256,
@@ -108,16 +108,60 @@ var APP_DATA = {
       },
       "linkHotspots": [
         {
-          "yaw": -1.6419645843446862,
-          "pitch": 0.447211033401695,
+          "yaw": 2.2727020985813535,
+          "pitch": 0.9251037191076179,
           "rotation": 0,
-          "target": "3-passage"
+          "target": "3-bed-room-v2"
+        },
+        {
+          "yaw": -1.593741431075813,
+          "pitch": 0.3543675045050527,
+          "rotation": 0,
+          "target": "4-passage"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "3-passage",
+      "id": "3-bed-room-v2",
+      "name": "Bed Room (V2)",
+      "levels": [
+        {
+          "tileSize": 256,
+          "size": 256,
+          "fallbackOnly": true
+        },
+        {
+          "tileSize": 512,
+          "size": 512
+        },
+        {
+          "tileSize": 512,
+          "size": 1024
+        },
+        {
+          "tileSize": 512,
+          "size": 2048
+        }
+      ],
+      "faceSize": 2000,
+      "initialViewParameters": {
+        "pitch": 0,
+        "yaw": 0,
+        "fov": 1.5707963267948966
+      },
+      "linkHotspots": [
+        {
+          "yaw": 0.5224481060349007,
+          "pitch": 0.778586080787699,
+          "rotation": 0,
+          "target": "2-bed-room-v1"
+        }
+      ],
+      "infoHotspots": []
+    },
+    {
+      "id": "4-passage",
       "name": "Passage",
       "levels": [
         {
@@ -146,22 +190,22 @@ var APP_DATA = {
       },
       "linkHotspots": [
         {
-          "yaw": -1.554058189105863,
-          "pitch": 0.5692909022349308,
+          "yaw": 1.4265585205679674,
+          "pitch": 0.28658237423498534,
+          "rotation": 0,
+          "target": "0-living-room"
+        },
+        {
+          "yaw": -1.538390157891019,
+          "pitch": 0.644014673477562,
           "rotation": 0,
           "target": "1-kitchen"
         },
         {
-          "yaw": -1.0157950632933588,
-          "pitch": 0.4266884059946534,
+          "yaw": -1.0172814103786987,
+          "pitch": 0.42155029299934554,
           "rotation": 0,
-          "target": "2-bedroom"
-        },
-        {
-          "yaw": 1.793182153971144,
-          "pitch": 0.6161732670074258,
-          "rotation": 0,
-          "target": "0-living-room"
+          "target": "2-bed-room-v1"
         }
       ],
       "infoHotspots": []
@@ -172,6 +216,6 @@ var APP_DATA = {
     "mouseViewMode": "drag",
     "autorotateEnabled": false,
     "fullscreenButton": true,
-    "viewControlButtons": true
+    "viewControlButtons": false
   }
 };

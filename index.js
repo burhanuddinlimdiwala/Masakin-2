@@ -473,12 +473,17 @@
   
   document.getElementById('hotspot3').addEventListener('click', function() {
   
-    var scene = findSceneById("2-bedroom");  // Replace with your scene ID
+    var scene = findSceneById("2-bed-room-v1");  // Replace with your scene ID
     switchScene(scene);
   });
   document.getElementById('hotspot4').addEventListener('click', function() {
   
-    var scene = findSceneById("3-passage");  // Replace with your scene ID
+    var scene = findSceneById("4-passage");  // Replace with your scene ID
+    switchScene(scene);
+  });
+  document.getElementById('hotspot5').addEventListener('click', function() {
+  
+    var scene = findSceneById("3-bed-room-v2");  // Replace with your scene ID
     switchScene(scene);
   });
 })();
